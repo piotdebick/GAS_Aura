@@ -3,7 +3,10 @@ DerivedDataCache
 Intermediate/
 Saved/
 Build
+UpgradeLog.htm
 
+.editorconfig
+.vsconfig
 .vscode
 .vs
 *.vc.db
