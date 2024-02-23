@@ -44,10 +44,10 @@ int32 AAuraEnemy::GetPlayerLevel()
 	return Level;
 }
 
-void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+void AAuraEnemy::Die()
 {
-	bHitReacting = NewCount > 0;
-	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+	SetLifeSpan(LifeSpan);
+	Super::Die();
 }
 
 void AAuraEnemy::BeginPlay()
@@ -56,6 +56,7 @@ void AAuraEnemy::BeginPlay()
 	
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
+	UAuraAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
 
 	if (UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
@@ -86,6 +87,12 @@ void AAuraEnemy::BeginPlay()
 		OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
 	}
 	
+}
+
+void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bHitReacting = NewCount > 0;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
 }
 
 void AAuraEnemy::InitAbilityActorInfo()
